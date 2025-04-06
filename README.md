@@ -22,17 +22,38 @@ This repository contains basic implementations of classic cryptography algorithm
 - Works on both Windows and Linux
 - Easy to copy-paste and test for exams
 
-## 📌 Note
+## 📂 Tinkering
 
-Some algorithms like AES, DES, and RSA may not be secure in these simplified versions. These are intended for learning purposes only.
-
-## 📂 How to Run
+### If you want to play around with the code, feel free to clone the repository and run the scripts
 
 ```bash
 git clone https://github.com/PacemakerX/cryptoLab.git
 cd cryptoLab
 python <filename>.py
 ```
+
+### Contributions are welcome!
+
+**Fork** the repository
+
+```bash
+git clone https://github.com/your-username/cryptoLab.git
+cd cryptoLab
+git checkout -b feature-name
+git commit -m "Add: <your message here>"
+git push origin feature-name
+```
+
+**Create a Pull Request**– and you're done 🎉
+
+## ⭐ Like the Project?
+
+If this project helped you understand cryptography better or saved you some last-minute exam stress 😅 —  
+**please consider giving it a star on GitHub!** It really helps boost visibility and keeps me motivated to add more cool stuff 🚀
+
+<p align="center">
+<img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/8aa99f6c-267d-4977-9cd3-1a4c11675863" width="500">
+</p>
 
 ## Feel free to connect with me!
 
