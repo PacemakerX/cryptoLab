@@ -14,6 +14,7 @@ This repository contains basic implementations of classic cryptography algorithm
 - SHA512 (using `hashlib`)
 - RSA (manual version )
 - DSA (manual version)
+- Diffie-Hellman Key Exchange (manual version)
 
 ## ✅ Features
 
