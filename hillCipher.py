@@ -4,14 +4,6 @@ def mod_inverse(a, m):
             return x
     return None
 
-def matrix_mult(A, B):
-    return [
-        (A[0]*B[0] + A[1]*B[2]) % 26,
-        (A[0]*B[1] + A[1]*B[3]) % 26,
-        (A[2]*B[0] + A[3]*B[2]) % 26,
-        (A[2]*B[1] + A[3]*B[3]) % 26
-    ]
-
 def encrypt(message, key):
     message = message.upper().replace(" ", "")
     if len(message) % 2 != 0:
