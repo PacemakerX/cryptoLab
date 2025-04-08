@@ -1,36 +1,67 @@
-def string_to_binary(s):
-    return ''.join(format(ord(c), '08b') for c in s)
+# === Any-size S-box ===
+s_box = [
+    [0x6, 0xB, 0x0, 0x4],
+    [0x3, 0xF, 0x8, 0x1],
+    [0xA, 0xD, 0x2, 0x7],
+    [0xC, 0x5, 0xE, 0x9]
+]
 
-def binary_to_string(b):
-    chars = [b[i:i+8] for i in range(0, len(b), 8)]
-    return ''.join(chr(int(char, 2)) for char in chars)
+# === Generate Inverse S-box ===
+inv_s_box = [[0] * len(s_box[0]) for _ in range(len(s_box))]
+for i in range(len(s_box)):
+    for j in range(len(s_box[0])):
+        val = s_box[i][j]
+        row = val // len(s_box[0])
+        col = val % len(s_box[0])
+        if row < len(inv_s_box) and col < len(inv_s_box[0]):
+            inv_s_box[row][col] = (i * len(s_box[0])) + j
 
-def xor(a, b):
-    return ''.join('0' if i == j else '1' for i, j in zip(a, b))
+# === Helper functions ===
+def xor_bits(a, b):
+    return ''.join(str(int(x)^int(y)) for x, y in zip(a, b))
 
-def des_encrypt(plain_text, key):
-    binary_plain = string_to_binary(plain_text)
-    binary_key = string_to_binary(key)
+def substitute(block, box):
+    size = len(box)
+    block_size = len(block)
+    out = ""
+    for i in range(0, block_size, 4):
+        nibble = block[i:i+4]
+        val = int(nibble, 2)
+        row = val // size
+        col = val % size
+        sub_val = box[row][col]
+        out += format(sub_val, '04b')
+    return out
 
-    # For simplicity, make key same length as plain text
-    binary_key = (binary_key * ((len(binary_plain) // len(binary_key)) + 1))[:len(binary_plain)]
+# === Encryption ===
+def des_encrypt(plain_text, key, box=s_box):
+    # Convert input to binary
+    plain_bin = ''.join(format(ord(c), '08b') for c in plain_text)
+    key_bin = ''.join(format(ord(c), '08b') for c in key)
 
-    cipher_binary = xor(binary_plain, binary_key)
-    return cipher_binary
+    # XOR and substitute
+    xored = xor_bits(plain_bin, key_bin[:len(plain_bin)])
+    substituted = substitute(xored, box)
 
-def des_decrypt(cipher_binary, key):
-    binary_key = string_to_binary(key)
-    binary_key = (binary_key * ((len(cipher_binary) // len(binary_key)) + 1))[:len(cipher_binary)]
+    return substituted
 
-    decrypted_binary = xor(cipher_binary, binary_key)
-    return binary_to_string(decrypted_binary)
+# === Decryption ===
+def des_decrypt(cipher_bin, key, inv_box=inv_s_box):
+    key_bin = ''.join(format(ord(c), '08b') for c in key)
 
-# === Example Usage ===
-plain = input("Enter plaintext: ")
-key = input("Enter key: ")
+    # Inverse substitute and XOR
+    inv_sub = substitute(cipher_bin, inv_box)
+    original_bin = xor_bits(inv_sub, key_bin[:len(cipher_bin)])
 
+    # Convert back to text
+    text = ''.join(chr(int(original_bin[i:i+8], 2)) for i in range(0, len(original_bin), 8))
+    return text
+
+# === Sample Usage ===
+plain = "Hi"
+key = "XY"  # Same length or longer than plain text
 cipher = des_encrypt(plain, key)
-print("Encrypted (binary):", cipher)
+print("Encrypted Binary:", cipher)
 
 decrypted = des_decrypt(cipher, key)
-print("Decrypted:", decrypted)
+print("Decrypted Text:", decrypted)
